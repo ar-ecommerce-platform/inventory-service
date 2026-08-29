@@ -44,6 +44,14 @@ docker build -t ecom/inventory-service . && docker run --rm -p 8084:8084 ecom/in
 
 Quality config is vendored: `gradle/quality.gradle`, `config/checkstyle/`.
 
+## Testing
+
+`./gradlew test` runs every layer below; `./gradlew build` also runs Checkstyle + Spotless and writes a JaCoCo report.
+
+- **Smoke** — `InventoryServiceApplicationTests`: the full Spring context starts.
+- **Unit** — `entity/InventoryItemTest`: `reserve` decrements available stock and throws `InsufficientStockException` when asked for more than is available, leaving stock unchanged.
+- **API / web slice** — `web/InventoryControllerTest` (`@WebMvcTest`): `GET /inventory/{id}`; `POST /inventory/{id}/reserve` → 200 with remaining stock, → 409 `INSUFFICIENT_STOCK`, → 404 for an unknown product.
+
 ## Config
 
 | Variable | Default | Purpose |
