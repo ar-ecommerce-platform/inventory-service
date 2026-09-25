@@ -3,6 +3,7 @@ package com.ecommerce.inventoryservice.web;
 import com.ecommerce.inventoryservice.service.InventoryService;
 import com.ecommerce.inventoryservice.web.dto.InventoryResponse;
 import com.ecommerce.inventoryservice.web.dto.ReserveRequest;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,8 @@ public class InventoryController {
     return InventoryResponse.from(service.get(productId));
   }
 
+  /** Called by order-service only; the gateway does not expose it, so it is not in the docs. */
+  @Hidden
   @PostMapping("/{productId}/reserve")
   public InventoryResponse reserve(
       @PathVariable Long productId, @Valid @RequestBody ReserveRequest request) {
